@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+
+</head>
+
+<body>
+    <script src="jquery.1.11.3.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="bootstrap.js"></script>
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">添加商品</button>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">添加商品详情</h4>
+                </div>
+                <!-- <div class="modal-body">按下 ESC 按钮退出。</div> -->
+                添加新商品:<br>
+                商品名称：<input type="text" class="inp1"><br>
+                商品价格：<input type="text" class="inp2"><br>
+                商品详情：<input type="text" class="inp3">
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="subss">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div class="row">
+        <!-- <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img src="img/1.jpg" alt="通用的占位符缩略图">
+                <div class="caption">
+                    <h3>缩略图标签</h3>
+                    <p>一些示例文本。一些示例文本。</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">
+                            按钮
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            按钮
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img src="img/2.jpg" alt="通用的占位符缩略图">
+                <div class="caption">
+                    <h3>缩略图标签</h3>
+                    <p>一些示例文本。一些示例文本。</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">
+                            按钮
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            按钮
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img src="img/3.jpg" alt="通用的占位符缩略图">
+                <div class="caption">
+                    <h3>缩略图标签</h3>
+                    <p>一些示例文本。一些示例文本。</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">
+                            按钮
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            按钮
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img src="img/4.jpg" alt="通用的占位符缩略图">
+                <div class="caption">
+                    <h3>缩略图标签</h3>
+                    <p>一些示例文本。一些示例文本。</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">
+                            按钮
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            按钮
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <script>
+        // axios.get("http://localhost:3000/products").then(res => {
+        //     console.log(res.data);
+        // });
+
+        // axios.post("http://localhost:3000/products",{
+        //     title:"葡萄",
+        //     price:12,
+        //     id:3
+        // }).then(res=>{
+        //     console.log(res.data);
+        // }).catch(err=>{
+        //     console.log(err);
+        // });
+        //     $(function () {
+        //        axios.post("http://localhost:3000/car",{
+        //          title:"香蕉",
+        //          price:17,
+        //          imgsrc:"img/05.jpg"
+        //     })
+
+        // })
+        $(function () {
+            function init() {
+                axios.get("http://localhost:3000/product").then(function (data) {
+                    var data = data.data;
+                    console.log(data);
+                    var str = "";
+                    for (var i in data) {
+                        str += `
+                    <div class="col-sm-6 col-md-3">
+                        <div class="thumbnail">
+                        <a href="http://localhost:3000/product?id=${data[i].id}"data-id="${data[i].id}">
+                        <img src="${data[i].imgsrc}" alt="${data[i].name}">
+                        <div class="caption">
+
+                        <p>${data[i].price}</p>
+                        <p>
+                        <a href="#" class="btn btn-primary" role="button">
+                            添加
+                        </a>
+                        <input type="button" class="btn btn-default" data-id="${data[i].id}" value="删除" role="button">
+                    </p>
+                    </div>
+                </div>
+            </div>
+                    `
+                    }
+                    $(".row").html(str);
+                })
+            }
+            init();
+            $("#subss").click(function () {
+                let name = $(".inp1").val();
+                let price = $(".inp2").val();
+                let imgsrc = $(".inp3").val();
+                axios.post("http://localhost:3000/product", {
+                    name,
+                    price,
+                    imgsrc
+                });
+
+            })
+
+
+
+            axios.get("http://localhost:3000/product").then(res => {
+                console.log(res.data);
+            });
+            console.log($(".row").get());
+            $(".row").on("click", "input", (e) => {
+                console.log(1);
+                var id = $(e.target).data("id");
+                axios.delete("http://localhost:3000/product/" + id).then(() => {
+                    init();
+                })
+            });
+        })
+    </script>
+</body>
+
+</html>
